@@ -17,10 +17,13 @@
             <input type="password" id="password" v-model="password" />
         </div>
         <button type="submit">Signup</button>
+        <p>{{ logMessage }}</p>
     </form>
 </template>
 
 <script>
+import { registerUser } from '@/api/index';
+
 export default {
     data() {
         return {
@@ -28,11 +31,28 @@ export default {
             email: '',
             nickname: '',
             password: '',
+            logMessage: '',
         };
     },
     methods: {
-        submitForm() {
+        async submitForm() {
             console.log(this.username);
+            let userData = {
+                username: this.username,
+                email: this.email,
+                nickname: this.nickname,
+                password: this.password,
+            };
+            const { data } = await registerUser(userData);
+            console.log(data.username);
+            this.logMessage = `${data.username} 님이 가입되었습니다! `;
+            this.initForm();
+        },
+        initForm() {
+            this.username = '';
+            this.email = '';
+            this.nickname = '';
+            this.password = '';
         },
     },
 };
