@@ -27,13 +27,25 @@ export default {
     },
     methods: {
         async submitForm() {
-            let userData = {
-                username: this.username,
-                password: this.password,
-            };
-            let { data } = await loginUser(userData);
-            console.log(data.user.nickname);
-            this.logMessage = `${data.user.nickname} 님 환영합니다`;
+            try {
+                let userData = {
+                    username: this.username,
+                    password: this.password,
+                };
+                let { data } = await loginUser(userData);
+                this.$store.commit('setusername', data.user.nickname);
+                console.log(data.user.nickname);
+                this.$router.push('/main');
+                // this.logMessage = `${data.user.nickname} 님 환영합니다`;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.initForm();
+            }
+        },
+        initForm() {
+            this.username = '';
+            this.password = '';
         },
     },
     computed: {
