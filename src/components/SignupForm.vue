@@ -16,13 +16,14 @@
             <label for="password">비밀번호 : </label>
             <input type="password" id="password" v-model="password" />
         </div>
-        <button type="submit">Signup</button>
+        <button type="submit" v-bind:disabled="!isUsernameValid">Signup</button>
         <p>{{ logMessage }}</p>
     </form>
 </template>
 
 <script>
 import { registerUser } from '@/api/index';
+import { validateEmail } from '@/util/validation';
 
 export default {
     data() {
@@ -47,12 +48,18 @@ export default {
             console.log(data.username);
             this.logMessage = `${data.nickname} 님이 가입되었습니다! `;
             this.initForm();
+            this.$router.push('/login');
         },
         initForm() {
             this.username = '';
             // this.email = '';
             this.nickname = '';
             this.password = '';
+        },
+    },
+    computed: {
+        isUsernameValid() {
+            return validateEmail(this.username);
         },
     },
 };
